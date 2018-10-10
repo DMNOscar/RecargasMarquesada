@@ -11,7 +11,7 @@ namespace UltraChip.Conexion
 
         private Connection()
         {
-            cadenaConexion = "server = 187.189.152.4; port = 3306; username = javiersl; password = javiersl; database = recargasmarquesada";
+            cadenaConexion = "server=187.189.152.4;port=3306;username = xampp; password = marquesada?466; SslMode=none;database=recargasmarquesada";
         }
 
         public static Connection getInstance()
@@ -60,7 +60,7 @@ namespace UltraChip.Conexion
 
         public void setCadenaConexion()
         {
-            this.cadenaConexion = "server = 187.189.152.4; port = 3306; username = javiersl; password = javiersl; database = recargasmarquesada";
+            this.cadenaConexion = "server = 187.189.152.4; port = 3306; username = xampp; password = marquesada?466; SslMode=none;database = recargasmarquesada";
         }
     }
 }
