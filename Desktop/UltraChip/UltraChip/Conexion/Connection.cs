@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
 namespace UltraChip.Conexion
@@ -41,10 +37,30 @@ namespace UltraChip.Conexion
             {
                 mysql.Close();
             }
-            catch (MySqlException e)
+            catch (Exception e)
             {
-                throw new Exception(e.Message);
+                //throw new Exception(e.Message);
             }
+        }
+
+        public MySqlConnection getConnection()
+        {
+            return mysql;
+        }
+
+        public Boolean isConnection()
+        {
+            return mysql != null;
+        }
+
+        public String getCadenaConexion()
+        {
+            return cadenaConexion;
+        }
+
+        public void setCadenaConexion()
+        {
+            this.cadenaConexion = "server = 187.189.152.4; port = 3306; username = javiersl; password = javiersl; database = recargasmarquesada";
         }
     }
 }
