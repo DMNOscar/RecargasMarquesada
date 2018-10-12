@@ -9,16 +9,17 @@
         {
             $host = $host == null ? "localhost" : $host;
             $user = $user == null ? "root" : $user;
-            $pass = $pass == null ? "root" : $pass;
+            $pass = $pass == null ? "" : $pass;
             $name = $name == null ? "ultrachip" : $name;
+            $port = $port == null ? "3306" : $port;
 
-            $db = new mysqli($host, $user, $pass, $name);
+            $db = new mysqli($host, $user, $pass, $name, $port);
         }
 
-        public static function getInstance($host = null, $user = null, $pass = null, $db = null)
+        public static function getInstance($host = null, $user = null, $pass = null, $db = null, $port = null)
         {
             if(self::$connection == null)
-                self::$connection = new Connection($host, $user, $pass, $db);
+                self::$connection = new Connection($host, $user, $pass, $db, $port);
 
             return self::$connection;
         }

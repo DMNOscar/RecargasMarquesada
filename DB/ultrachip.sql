@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS recargasmarquesada;
-CREATE DATABASE IF NOT EXISTS recargasmarquesada;
-USE recargasmarquesada;
+DROP DATABASE IF EXISTS ultrachip;
+CREATE DATABASE IF NOT EXISTS ultrachip;
+USE ultrachip;
 
 -- Tabla que guarda los tipos de permiso de acceso
 CREATE TABLE permiso
@@ -80,7 +80,9 @@ CREATE TABLE credencial
 (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	nick VARCHAR(20) UNIQUE NOT NULL,
-	pass VARCHAR(100) NOT NULL
+	pass VARCHAR(100) NOT NULL,
+    usuario_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY(usuario_id) REFERENCES usuario(id)
 );
 
 -- Tabla que crea y especifica el tipo de usuario
