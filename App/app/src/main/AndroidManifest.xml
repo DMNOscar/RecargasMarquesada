@@ -23,6 +23,11 @@
         </activity>
         <activity android:name=".LoginActivity">
         </activity>
+        <activity
+            android:name=".InicialActivity"
+            android:label="@string/title_activity_inicial"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
