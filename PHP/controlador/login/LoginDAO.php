@@ -25,7 +25,7 @@
         {
             $passEncriptado = Encrypter::getInstance()->encrypt($pass);
 
-            $query = "SELECT u.id AS usuario_id, u.nombre, p.id AS permiso_id, p.nombre AS permiso
+            $query = "SELECT u.id AS usuario_id, u.nombre, u.telefono, c.id AS credencial_id, p.id AS permiso_id, p.nombre AS permiso
             FROM usuario u
             INNER JOIN credencial c ON c.usuario_id = u.id
             INNER JOIN permiso p ON u.permiso_id = p.id
