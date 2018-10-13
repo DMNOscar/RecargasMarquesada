@@ -3,9 +3,9 @@
     class Connection
     {
         private static $connection;
-        private $db;
+        private static $db;
 
-        private function __construct($host = null, $user = null, $pass = null, $name = null)
+        private function __construct($host = null, $user = null, $pass = null, $name = null, $port = null)
         {
             $host = $host == null ? "localhost" : $host;
             $user = $user == null ? "root" : $user;
@@ -13,7 +13,7 @@
             $name = $name == null ? "ultrachip" : $name;
             $port = $port == null ? "3306" : $port;
 
-            $db = new mysqli($host, $user, $pass, $name, $port);
+            self::$db = new mysqli($host, $user, $pass, $name, $port);
         }
 
         public static function getInstance($host = null, $user = null, $pass = null, $db = null, $port = null)
@@ -26,12 +26,12 @@
 
         public function connectDB()
         {
-            if($db->connect_error)
+            if(self::$db->connect_error)
                 die();
             else
             {
-                $db->set_charset("utf8");
-                return $db;
+                self::$db->set_charset("utf8");
+                return self::$db;
             }
         }
 
