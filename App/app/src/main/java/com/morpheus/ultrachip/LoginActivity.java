@@ -73,8 +73,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view)
     {
-        hiloPermisos.run();
-        hiloUsuario.run();
+        //hiloPermisos.run();
+        //hiloUsuario.run();
+        getPermisos();
+        getUsuario();
     }
 
     Thread hiloPermisos = new Thread(new Runnable()
@@ -136,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     //Metodo que controla la entrada de los hilos de ejecucion
-    private synchronized void conexionHilos()
+    private void conexionHilos()
     {
         if(permisos != null && usuario != null)
         {
