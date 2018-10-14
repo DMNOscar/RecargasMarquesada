@@ -18,6 +18,7 @@ import com.morpheus.ultrachip.Herramientas.Constantes;
 import com.morpheus.ultrachip.Herramientas.Peticion;
 import com.morpheus.ultrachip.Herramientas.PreferencesLogin;
 import com.morpheus.ultrachip.Modelo.Permiso;
+import com.morpheus.ultrachip.Modelo.Usuario;
 
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private CheckBox chkDatos;
     private ProgressDialog progressDialog;
     private PreferencesLogin preferencesLogin;
+    private List<Permiso> permisos;
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,19 +73,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view)
     {
-
+        hiloPermisos.run();
+        hiloUsuario.run();
     }
 
+    Thread hiloPermisos = new Thread(new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            getPermisos();
+        }
+    });
+
+    Thread hiloUsuario = new Thread(new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            getUsuario();
+        }
+    });
+
     //Metodo que obtiene la lista de permisos registrados
-    private synchronized void getPermisos()
+    private void getPermisos()
     {
         LoginDAO.getInstance().getPermisos(this, new Peticion.OnResultListListener<Permiso>()
         {
             @Override
             public void onSuccess(List<Permiso> result)
             {
-                for(Permiso permiso : result)
-                    Log.i("permiso", permiso.toString());
+                permisos = result;
+                conexionHilos();
             }
 
             @Override
@@ -91,5 +113,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(LoginActivity.this, message + " " + code, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //Metodo que obtiene los datos de usuario que se logea
+    private void getUsuario()
+    {
+        LoginDAO.getInstance().getUsuario(this, edtUsuario.getText().toString().trim(), edtPass.getText().toString().trim(), new Peticion.OnResultElementListener<Usuario>()
+        {
+            @Override
+            public void onSuccess(Usuario result)
+            {
+                usuario = result;
+                conexionHilos();
+            }
+
+            @Override
+            public void onFailed(String message, int code)
+            {
+                Toast.makeText(LoginActivity.this, message + " " + code, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //Metodo que controla la entrada de los hilos de ejecucion
+    private synchronized void conexionHilos()
+    {
+        if(permisos != null && usuario != null)
+        {
+            Log.i("hilo", "Hilos sincronizados");
+            chkDatos.setChecked(false);
+            Toast.makeText(this, "Usuario logeado con hilos", Toast.LENGTH_SHORT).show();
+        }
     }
 }

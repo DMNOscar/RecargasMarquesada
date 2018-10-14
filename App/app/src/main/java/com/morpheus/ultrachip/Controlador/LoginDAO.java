@@ -1,6 +1,7 @@
 package com.morpheus.ultrachip.Controlador;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.morpheus.ultrachip.Herramientas.Constantes;
 import com.morpheus.ultrachip.Herramientas.Peticion;
@@ -90,7 +91,7 @@ public class LoginDAO
                 try
                 {
                     JSONObject object = new JSONObject(respuesta);
-                    Credencial credencial = new Credencial(Integer.parseInt(object.getString("credencia_id")), nick, pass);
+                    Credencial credencial = new Credencial(Integer.parseInt(object.getString("credencial_id")), nick, pass);
                     Permiso permiso = new Permiso(Integer.parseInt(object.getString("permiso_id")), object.getString("permiso"));
                     Usuario usuario = new Usuario(Integer.parseInt(object.getString("usuario_id")), object.getString("nombre"),
                             object.getString("telefono"), true, permiso, credencial);
