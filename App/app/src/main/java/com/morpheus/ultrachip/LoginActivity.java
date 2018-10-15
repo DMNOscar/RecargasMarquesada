@@ -1,6 +1,7 @@
 package com.morpheus.ultrachip;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private PreferencesLogin preferencesLogin;
     private List<Permiso> permisos;
     private Usuario usuario;
+    private boolean hiloUsuario, hiloPermisos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,6 +49,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btAceptar = findViewById(R.id.btAceptar);
 
         progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Cargando");
+        progressDialog.setMessage("Un momento...");
         progressDialog.setCanceledOnTouchOutside(false);
         preferencesLogin = PreferencesLogin.getInstance(this);
 
@@ -73,29 +77,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view)
     {
-        //hiloPermisos.run();
-        //hiloUsuario.run();
+        hiloUsuario = false;
+        hiloPermisos = false;
+        progressDialog.show();
+
         getPermisos();
         getUsuario();
     }
-
-    Thread hiloPermisos = new Thread(new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            getPermisos();
-        }
-    });
-
-    Thread hiloUsuario = new Thread(new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            getUsuario();
-        }
-    });
 
     //Metodo que obtiene la lista de permisos registrados
     private void getPermisos()
@@ -105,13 +93,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onSuccess(List<Permiso> result)
             {
-                permisos = result;
-                conexionHilos();
+                if(result != null)
+                {
+                    permisos = result;
+                    hiloPermisos = true;
+                    conexionHilos();
+                }
+                else
+                {
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "No existen los permisos", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailed(String message, int code)
             {
+                progressDialog.dismiss();
                 Toast.makeText(LoginActivity.this, message + " " + code, Toast.LENGTH_SHORT).show();
             }
         });
@@ -125,13 +123,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onSuccess(Usuario result)
             {
-                usuario = result;
-                conexionHilos();
+                if(result != null)
+                {
+                    usuario = result;
+                    hiloUsuario = true;
+                    conexionHilos();
+                }
+                else
+                {
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "Verifique su usuario y contraseña", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailed(String message, int code)
             {
+                progressDialog.dismiss();
                 Toast.makeText(LoginActivity.this, message + " " + code, Toast.LENGTH_SHORT).show();
             }
         });
@@ -140,11 +148,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //Metodo que controla la entrada de los hilos de ejecucion
     private void conexionHilos()
     {
-        if(permisos != null && usuario != null)
+        if(hiloPermisos && hiloUsuario)
         {
-            Log.i("hilo", "Hilos sincronizados");
-            chkDatos.setChecked(false);
-            Toast.makeText(this, "Usuario logeado con hilos", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+            guardarCredenciales(usuario);
+            Intent intent = new Intent(this, InicialActivity.class);
+            intent.putExtra(Constantes.USUARIO, usuario);
+            startActivity(intent);
         }
+    }
+
+    //Metodo que permite guardar las credenciales por default
+    private void guardarCredenciales(Usuario usuario)
+    {
+        if(chkDatos.isChecked())
+            preferencesLogin.setValues(usuario.getCredencial().getNick(), usuario.getCredencial().getPass());
+        else
+            preferencesLogin.setValues("", "");
     }
 }
