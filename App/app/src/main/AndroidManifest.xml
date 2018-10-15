@@ -11,6 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- Actividades -->
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
@@ -28,6 +30,15 @@
             android:label="@string/title_activity_inicial"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <!-- Broadcast -->
+        <receiver android:name=".BroadcastNetwork"
+                  android:label="NetworkReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
