@@ -44,6 +44,7 @@ public class Peticion
     {
         private String url;
         private Context context;
+        private StringRequest request;
 
         public GET(Context context, String url)
         {
@@ -52,10 +53,10 @@ public class Peticion
         }
 
         //Respuesta del metodo GET
-        public void getResponse(final OnPeticionListener<String> listener)
+        public void getResponse(final OnPeticionListener<String> listener, String tag)
         {
             RequestQueue queue = Volley.newRequestQueue(context);
-            StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>()
+            request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>()
             {
                 @Override
                 public void onResponse(String response)
@@ -72,7 +73,13 @@ public class Peticion
             });
 
             request.setRetryPolicy(new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            request.setTag(tag);
             queue.add(request);
+        }
+
+        public StringRequest getRequest()
+        {
+            return request;
         }
     }
 
@@ -82,6 +89,7 @@ public class Peticion
         private Context context;
         private String url;
         private Map<String, String> parametros;
+        private StringRequest request;
 
         public POST(Context context, String url, Map<String, String> parametros)
         {
@@ -91,10 +99,10 @@ public class Peticion
         }
 
         //Respuesta del metodo POST
-        public void getResponse(final OnPeticionListener<String> listener)
+        public void getResponse(final OnPeticionListener<String> listener, String tag)
         {
             RequestQueue queue = Volley.newRequestQueue(context);
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
+            request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
             {
                 @Override
                 public void onResponse(String response)
@@ -124,7 +132,13 @@ public class Peticion
             };
 
             request.setRetryPolicy(new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            request.setTag(tag);
             queue.add(request);
+        }
+
+        public StringRequest getRequest()
+        {
+            return request;
         }
     }
 
@@ -134,6 +148,7 @@ public class Peticion
         private Context context;
         private String url;
         private Map<String, String> parametros;
+        private StringRequest request;
 
         public PUT(Context context, String url, Map<String, String> parametros)
         {
@@ -143,10 +158,10 @@ public class Peticion
         }
 
         //Metodo que regresa una respuesta
-        public void getResponseString(final OnPeticionListener<String> listener)
+        public void getResponseString(final OnPeticionListener<String> listener, String tag)
         {
             RequestQueue queue = Volley.newRequestQueue(context);
-            StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>()
+            request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>()
             {
                 @Override
                 public void onResponse(String response)
@@ -176,7 +191,13 @@ public class Peticion
             };
 
             request.setRetryPolicy(new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            request.setTag(tag);
             queue.add(request);
+        }
+
+        public StringRequest getRequest()
+        {
+            return request;
         }
     }
 
@@ -185,6 +206,7 @@ public class Peticion
     {
         private Context context;
         private String url;
+        private StringRequest request;
 
         public DELETE(Context context, String url)
         {
@@ -192,10 +214,10 @@ public class Peticion
             this.url = url;
         }
 
-        public void getResponse(final OnPeticionListener<String> listener)
+        public void getResponse(final OnPeticionListener<String> listener, String tag)
         {
             RequestQueue queue = Volley.newRequestQueue(context);
-            StringRequest request = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>()
+            request = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>()
             {
                 @Override
                 public void onResponse(String response)
@@ -212,7 +234,13 @@ public class Peticion
             });
 
             request.setRetryPolicy(new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            request.setTag(tag);
             queue.add(request);
+        }
+
+        public StringRequest getRequest()
+        {
+            return request;
         }
     }
 }

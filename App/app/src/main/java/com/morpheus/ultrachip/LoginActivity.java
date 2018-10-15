@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.morpheus.ultrachip.Controlador.LoginDAO;
 import com.morpheus.ultrachip.Herramientas.Constantes;
 import com.morpheus.ultrachip.Herramientas.Peticion;
@@ -62,10 +63,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         {
             edtUsuario.setText(preferencesLogin.getUser());
             edtPass.setText(preferencesLogin.getPass());
-
-            //Selecciona el texto introducido
-            edtUsuario.setSelection(edtUsuario.length());
-            edtPass.setSelection(edtPass.length());
 
             chkDatos.setChecked(preferencesLogin.getUser().length() > 0 && preferencesLogin.getPass().length() > 0);
         }
@@ -118,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //Metodo que obtiene los datos de usuario que se logea
     private void getUsuario()
     {
-        LoginDAO.getInstance().getUsuario(this, edtUsuario.getText().toString().trim(), edtPass.getText().toString().trim(), new Peticion.OnResultElementListener<Usuario>()
+        Request request = LoginDAO.getInstance().getUsuario(this, edtUsuario.getText().toString().trim(), edtPass.getText().toString().trim(), new Peticion.OnResultElementListener<Usuario>()
         {
             @Override
             public void onSuccess(Usuario result)
@@ -143,6 +140,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(LoginActivity.this, message + " " + code, Toast.LENGTH_SHORT).show();
             }
         });
+
+        //Cancela la peticion
+        request.cancel();
+        if(request.isCanceled())
+        {
+            Toast.makeText(this, "Peticion cancelada", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+        }
     }
 
     //Metodo que controla la entrada de los hilos de ejecucion

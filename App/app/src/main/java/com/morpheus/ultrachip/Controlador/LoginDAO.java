@@ -3,6 +3,7 @@ package com.morpheus.ultrachip.Controlador;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.morpheus.ultrachip.Herramientas.Constantes;
 import com.morpheus.ultrachip.Herramientas.Peticion;
 import com.morpheus.ultrachip.Modelo.Credencial;
@@ -35,7 +36,7 @@ public class LoginDAO
     }
 
     //Permite obtener una lista de Permisos
-    public void getPermisos(Context context, final Peticion.OnResultListListener<Permiso> listener)
+    public Request getPermisos(Context context, final Peticion.OnResultListListener<Permiso> listener)
     {
         String url = Constantes.HOST + "login/permisosService.php";
 
@@ -70,11 +71,13 @@ public class LoginDAO
             {
                 listener.onFailed(error, respuestaHTTP);
             }
-        });
+        }, "permisos");
+
+        return get.getRequest();
     }
 
     //Permite obtener el usuario en caso de logeo exitoso
-    public void getUsuario(Context context, final String nick, final String pass, final Peticion.OnResultElementListener<Usuario> listener)
+    public Request getUsuario(Context context, final String nick, final String pass, final Peticion.OnResultElementListener<Usuario> listener)
     {
         String url = Constantes.HOST + "login/usuarioService.php";
 
@@ -109,6 +112,8 @@ public class LoginDAO
             {
                 listener.onFailed(error, respuestaHTTP);
             }
-        });
+        }, "usuario");
+
+        return post.getRequest();
     }
 }
