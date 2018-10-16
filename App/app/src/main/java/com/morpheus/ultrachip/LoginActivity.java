@@ -1,8 +1,13 @@
 package com.morpheus.ultrachip;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
@@ -69,6 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btAceptar.setOnClickListener(this);
 
+        chequeoInternet();
     }
 
     @Override
@@ -170,5 +176,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             preferencesLogin.setValues(usuario.getCredencial().getNick(), usuario.getCredencial().getPass());
         else
             preferencesLogin.setValues("", "");
+    }
+
+    //Metodo que dispara la intencion del chequeo de internet
+    private void chequeoInternet()
+    {
+        IntentFilter intentFilter = new IntentFilter(BroadcastNetwork.NETWORK_AVAILABLE_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                boolean isNetworkAvailable = intent.getBooleanExtra(BroadcastNetwork.IS_NETWORK_AVAILABLE, false);
+                String networkStatus = isNetworkAvailable ? "Conectado" : "Desconectado";
+
+                edtUsuario.setText(networkStatus);
+
+                Snackbar.make(findViewById(R.id.login), "Estado Conexión: " + networkStatus, Snackbar.LENGTH_LONG).show();
+            }
+        }, intentFilter);
     }
 }
